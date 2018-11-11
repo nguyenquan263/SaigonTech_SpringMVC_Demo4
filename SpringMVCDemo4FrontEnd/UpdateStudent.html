@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Update a specialization</title>
+    <style>
+        td>input {
+	margin: 0;
+	height: 100% !important;
+	display: inline-block;
+	width: 98%;
+	border-radius: 0 !important;
+}
+</style>
+</head>
+
+<body>
+    <h3>Add a student</h3>
+    <form action="saveStudent" method="POST">
+        <table border="1" style="width: 50%">
+            <tr>
+                <th align="left" width="30%">First Name:</th>
+                <td align="left" width="70%"><input type="text" id="updateFirstName"></td>
+            </tr>
+            <tr>
+                <th align="left" width="30%">Last Name:</th>
+                <td align="left" width="70%"><input type="text" id="updateLastName"></td>
+            </tr>
+            <tr>
+                <th align="left" width="30%">Email:</th>
+                <td align="left" width="70%"><input type="text" id="updateEmail"></td>
+            </tr>
+            <tr>
+                <th align="left" width="30%">Image:</th>
+                <td align="left" width="70%"><input type="file" id="updateImage"></td>
+            </tr>
+            <tr>
+                <th align="left" width="30%">Gender:</th>
+                <td align="left" width="70%">
+
+
+                    <table style="width: 100%">
+                        <tr>
+                            <td width="10%">
+                                <p>Male</p>
+                            </td>
+                            <td width="40%"><input type="radio" name="updateGender" value="true" checked="checked"></td>
+                            <td width="10%">
+                                <p>Female</p>
+                            </td>
+                            <td width="40%"><input type="radio" name="updateGender" value="false"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <th align="left">Specialization:</th>
+                <td><select style="width: 100%" id="updateSpecialization">
+
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <br /> <input style="height: 50px" type="button" value="Update student" onclick="updateStudent();" />
+    </form>
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/js.cookie.min.js"></script>
+    <script language="javascript">
+        var targetStudent = null;
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/SpringMVCDemo4/rest/SpecializationREST',
+                headers: {
+                    "Authorization": Cookies.get("token")
+                },
+                success: function (data) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        $("#updateSpecialization").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/SpringMVCDemo4/rest/StudentREST/' + Cookies.get("updateID"),
+                headers: {
+                    "Authorization": Cookies.get("token")
+                },
+                success: function (data) {
+                    console.log(data);
+
+                    $("#updateFirstName").val(data.firstName);
+                    $("#updateLastName").val(data.lastName);
+                    $("#updateEmail").val(data.email);
+                    $("input[name=updateGender][value=" + data.male + "]").attr('checked', 'checked');
+                    $("#updateSpecialization option[value=" + data.specialization.id + "]").attr("selected", "selected");
+                    targetStudent = data;
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+
+        });
+
+        function updateStudent() {
+            var updateData = new FormData();
+            updateData.append("firstName", $("#updateFirstName").val());
+            updateData.append("lastName", $("#updateLastName").val());
+            updateData.append("email", $("#updateEmail").val());
+
+            var temp = $('#updateImage')[0].files[0];
+            if (temp)
+                updateData.append("image", $('#updateImage')[0].files[0]);
+            else
+                updateData.append("image", null);
+
+            updateData.append("isMale", $('input[name=updateGender]:checked').val());
+            updateData.append("specialization", $("#updateSpecialization option:selected").val());
+
+            for (var pair of updateData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+
+
+            $.ajax({
+
+                url: "http://localhost:8080/SpringMVCDemo4/rest/StudentREST/"+targetStudent.id,
+                headers: {
+                    "Authorization": Cookies.get("token")
+                },
+                data: updateData,
+                type: "POST",
+                processData: false,
+                contentType: false,
+
+                success: function (data) {
+                    console.log(data);
+                    location.href = "StudentList.html"
+                },
+
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

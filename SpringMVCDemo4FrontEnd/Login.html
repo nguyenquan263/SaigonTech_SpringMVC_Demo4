@@ -1,0 +1,63 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>Username: </th>
+            <td><input type="text" id="usernameTB" /></td>
+        </tr>
+        <tr>
+            <th>Password: </th>
+            <td><input type="password" id="passwordTB" /></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td><button id="loginBT"> Log in </button></td>
+        </tr>
+    </table>
+
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/js.cookie.min.js"></script>
+    <script language="javascript">
+
+        $("#loginBT").click(function () {
+            var loginContent = {
+                "username": $("#usernameTB").val(),
+                "password": $("#passwordTB").val()
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/SpringMVCDemo4/rest/manage/login',
+                dataType: 'text',
+                data: JSON.stringify(loginContent),
+                success: function (data) {
+                    if (data != "Log-in fail") {
+                        Cookies.set("token", data);
+                        console.log();
+                        location.href = "StudentList.html"
+                    } else {
+                        alert(data);
+                    }
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+        });
+    </script>
+</body>
+
+</html>

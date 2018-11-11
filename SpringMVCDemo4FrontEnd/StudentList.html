@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Student List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+    <table border="1" style="width: 90%">
+        <thead>
+            <tr>
+                <th>No. </th>
+                <th>Image </th>
+                <th>First name </th>
+                <th>Last name </th>
+                <th>Gender </th>
+                <th>Email </th>
+                <th>Specialization </th>
+                <th> </th>
+
+            </tr>
+        </thead>
+        <tbody id="data">
+            
+        </tbody>
+    </table>
+
+    <button onclick="goAdd();">ADD A STUDENT</button>
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/js.cookie.min.js"></script>
+    <script language="javascript">
+        $(document).ready(function () {
+
+
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/SpringMVCDemo4/rest/StudentREST',
+                headers: {
+                    "Authorization": Cookies.get("token")
+                },
+                success: function (data) {
+                    if (data == "token expired")
+                        location.href = "Login.html"
+
+                    for (var i = 0; i < data.length; i++){
+                        $("#data").append("<tr>");
+                        $("#data").append("<td>"+(i+1)+"</td>");
+                        $("#data").append("<td><img width='100px' height='150px' src='http://localhost:8080/SpringMVCDemo4/getImage/"+data[i].image+"'/></td>");
+                        $("#data").append("<td><a href='#' onclick='goUpdate("+(data[i].id)+")'>"+(data[i].firstName)+"</a></td>");
+                        $("#data").append("<td>"+(data[i].lastName)+"</td>");
+                        $("#data").append("<td>"+getGender(data[i].male)+"</td>");
+                        $("#data").append("<td>"+(data[i].email)+"</td>");
+                        $("#data").append("<td>"+(data[i].specialization.name)+"</td>");
+                        $("#data").append("<td><button onClick='deleteStudent("+data[i].id+")'>Delete</button></td>");
+                        $("#data").append("</tr>");
+                    }
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+        });
+
+        function deleteStudent(i){
+            $.ajax({
+                type: 'DELETE',
+                url: 'http://localhost:8080/SpringMVCDemo4/rest/StudentREST/'+i,
+                headers: {
+                    "Authorization": Cookies.get("token"),
+                },
+                dataType : 'text',
+                success: function (data) {
+                    alert(data);
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+
+            });
+        }
+
+
+
+        function getGender(ismale){
+            if (ismale == true)
+                return "male";
+            else return "female";
+        }
+
+        function goAdd(){
+            location.href = "AddStudent.html";
+        }
+
+        function goUpdate(id){
+            Cookies.set("updateID", id);
+            location.href = "UpdateStudent.html";
+        }
+
+        
+    </script>
+</body>
+
+</html>
