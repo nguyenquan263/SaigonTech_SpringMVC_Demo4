@@ -29,15 +29,11 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			chain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {
-			System.out.println("Expire token");
-			
-			res.getWriter().write("token expired");
+			res.getWriter().write("Token expired");
 			res.flushBuffer();
 			
 		} catch (MalformedJwtException e) {
-			
 			res.setStatus(HttpStatus.BAD_REQUEST.value());
-			
 			res.getWriter().write("Invalid token");
 			res.flushBuffer();
 		}

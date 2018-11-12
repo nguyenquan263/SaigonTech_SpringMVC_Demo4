@@ -21,12 +21,12 @@ public class SpringWebAppInitializer implements WebApplicationInitializer {
 				new DispatcherServlet(appContext));
 		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping("/");
-		
+
 		FilterRegistration.Dynamic fr = servletContext.addFilter("encodingFilter", CharacterEncodingFilter.class);
-		 
-        fr.setInitParameter("encoding", "UTF-8");
-        fr.setInitParameter("forceEncoding", "true");
-        fr.addMappingForUrlPatterns(null, true, "/*");
+
+		fr.setInitParameter("encoding", "UTF-8");
+		fr.setInitParameter("forceEncoding", "true");
+		fr.addMappingForUrlPatterns(null, true, "/*");
 	}
 
 }

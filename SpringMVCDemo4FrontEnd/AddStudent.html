@@ -76,6 +76,9 @@
                     "Authorization": Cookies.get("token")
                 },
                 success: function (data) {
+					if (data == "token expired")
+                        location.href = "Login.html"
+				
                     console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         $("#addSpecialization").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");

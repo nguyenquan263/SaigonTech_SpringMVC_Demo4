@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,12 +43,9 @@ public class studentRESTController {
 	}
 
 	@RequestMapping(value = "/StudentREST", method = RequestMethod.POST)
-	public Student addStu(HttpServletRequest req, 
-			@RequestParam("firstName") String firstName,
-			@RequestParam("lastName") String lastName, 
-			@RequestParam("email") String email,
-			@RequestParam("isMale") boolean isMale, 
-			@RequestParam("image") MultipartFile imageFile,
+	public Student addStu(HttpServletRequest req, @RequestParam("firstName") String firstName,
+			@RequestParam("lastName") String lastName, @RequestParam("email") String email,
+			@RequestParam("isMale") boolean isMale, @RequestParam("image") MultipartFile imageFile,
 			@RequestParam("specialization") int specID) throws IOException {
 
 		Student targetStu = new Student();
@@ -71,29 +69,25 @@ public class studentRESTController {
 		return studentDAO.deleteStudent(id);
 	}
 
-//	@RequestMapping(value = "/StudentREST", method = RequestMethod.PUT)
-//	public Student updateStu(@RequestBody Student targetStu) {
-//
-//		return studentDAO.updateStudent(targetStu);
-//	}
-
 	@RequestMapping(value = "/StudentREST/{targetStudentID}", method = RequestMethod.POST)
 	public Student updateStu(HttpServletRequest req, @PathVariable("targetStudentID") int id,
 			@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName,
 			@RequestParam("email") String email, @RequestParam("isMale") boolean isMale,
-			@RequestParam("image") MultipartFile imageFile, @RequestParam("specialization") int specID)
-			throws IOException {
+			@RequestParam(value = "image", required = false) MultipartFile imageFile,
+			@RequestParam("specialization") int specID) throws IOException {
 
+		System.out.println(imageFile);
 		Student targetStu = studentDAO.getStudentByID(id);
-
-		fileUploadUtils.deleteUploadFile(targetStu.getImage(), req.getServletContext().getRealPath("/images/"));
 
 		targetStu.setLastName(lastName);
 		targetStu.setFirstName(firstName);
 		targetStu.setEmail(email);
 		targetStu.setMale(isMale);
-		targetStu
-				.setImage(fileUploadUtils.saveUploadedFile(imageFile, req.getServletContext().getRealPath("/images/")));
+		if (imageFile != null) {
+			fileUploadUtils.deleteUploadFile(targetStu.getImage(), req.getServletContext().getRealPath("/images/"));
+			targetStu.setImage(
+					fileUploadUtils.saveUploadedFile(imageFile, req.getServletContext().getRealPath("/images/")));
+		}
 		targetStu.setSpecialization(specializationDAO.getSpecializationByID(specID));
 
 		return studentDAO.updateStudent(targetStu);

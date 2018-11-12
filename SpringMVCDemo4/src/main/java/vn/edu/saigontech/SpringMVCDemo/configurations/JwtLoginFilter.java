@@ -29,13 +29,11 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		LoginRequest logReq = getLoginRequest(request);
-		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(logReq.getUsername(), logReq.getPassword());
+		UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(logReq.getUsername(),
+				logReq.getPassword());
 		return getAuthenticationManager().authenticate(authRequest);
-		
-	
+
 	}
-	
-	
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
@@ -48,28 +46,28 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 			AuthenticationException failed) throws IOException, ServletException {
 		TokenAuthenticationService.failAuthentication(response, failed.getMessage());
 	}
-	
-	private LoginRequest getLoginRequest(HttpServletRequest request) {
-        BufferedReader reader = null;
-        LoginRequest loginRequest = null;
-        try {
-            reader = request.getReader();
-            Gson gson = new Gson();
-            loginRequest = gson.fromJson(reader, LoginRequest.class);
-        } catch (IOException ex) {
-            logger.error(null, ex);
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException ex) {
-                logger.error(null, ex);
-            }
-        }
 
-        if (loginRequest == null) {
-            loginRequest = new LoginRequest();
-        }
-        return loginRequest;
-    }
+	private LoginRequest getLoginRequest(HttpServletRequest request) {
+		BufferedReader reader = null;
+		LoginRequest loginRequest = null;
+		try {
+			reader = request.getReader();
+			Gson gson = new Gson();
+			loginRequest = gson.fromJson(reader, LoginRequest.class);
+		} catch (IOException ex) {
+			logger.error(null, ex);
+		} finally {
+			try {
+				reader.close();
+			} catch (IOException ex) {
+				logger.error(null, ex);
+			}
+		}
+
+		if (loginRequest == null) {
+			loginRequest = new LoginRequest();
+		}
+		return loginRequest;
+	}
 
 }

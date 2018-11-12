@@ -98,6 +98,8 @@ public class ApplicationContextConfig {
 		return new studentDAO();
 	}
 
+	//java bean that config CORS in this project, it sets origin, method, header, and url that our Back-End allow
+	
 	@Bean(name="corsConfigurationSource")
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -110,6 +112,7 @@ public class ApplicationContextConfig {
     }
 	
 	
+	//java bean that config the type of multipart requests will be consumed by this Back-End Application 
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
 	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();

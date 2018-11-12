@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <h3>Add a student</h3>
+    <h3>Update a student</h3>
     <form action="saveStudent" method="POST">
         <table border="1" style="width: 50%">
             <tr>
@@ -77,6 +77,8 @@
                     "Authorization": Cookies.get("token")
                 },
                 success: function (data) {
+                    if (data == "token expired")
+                        location.href = "Login.html"
                     console.log(data);
                     for (var i = 0; i < data.length; i++) {
                         $("#updateSpecialization").append("<option value='" + data[i].id + "'>" + data[i].name + "</option>");
