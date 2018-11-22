@@ -73,7 +73,8 @@ public class uploadFileRESTController extends HttpServlet {
 
 	@RequestMapping(value = "/getImage/{fileName:.+}", method = RequestMethod.GET)
 
-	public void showImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("fileName") String fileName) throws Exception {
+	public void showImage(HttpServletRequest request, HttpServletResponse response, @PathVariable("fileName") String fileName) 
+			throws Exception {
 
 		System.out.println(fileName);
 		ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();

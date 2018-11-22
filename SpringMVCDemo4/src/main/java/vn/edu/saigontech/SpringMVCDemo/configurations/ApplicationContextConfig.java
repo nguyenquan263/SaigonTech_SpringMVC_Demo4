@@ -1,6 +1,5 @@
 package vn.edu.saigontech.SpringMVCDemo.configurations;
 
-
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -98,26 +97,30 @@ public class ApplicationContextConfig {
 		return new studentDAO();
 	}
 
-	//java bean that config CORS in this project, it sets origin, method, header, and url that our Back-End allow
-	
-	@Bean(name="corsConfigurationSource")
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
-        configuration.setAllowedHeaders(Arrays.asList("x-atlassian-token","charset","authorization", "Content-Type", "content-type", "x-requested-with", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "x-auth-token", "x-app-id", "Origin","Accept", "X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-	
-	
-	//java bean that config the type of multipart requests will be consumed by this Back-End Application 
+	// java bean that config CORS in this project, it sets origin, method, header,
+	// and url that our Back-End allow
+
+	@Bean(name = "corsConfigurationSource")
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT"));
+		configuration.setAllowedHeaders(Arrays.asList("x-atlassian-token", "charset", "authorization", "Content-Type",
+				"content-type", "x-requested-with", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers",
+				"x-auth-token", "x-app-id", "Origin", "Accept", "X-Requested-With", "Access-Control-Request-Method",
+				"Access-Control-Request-Headers"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+
+	// java bean that config the type of multipart requests will be consumed by this
+	// Back-End Application
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
-	    CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-	    multipartResolver.setDefaultEncoding("utf-8");
-	    multipartResolver.setMaxUploadSize(10000000);
-	    return multipartResolver;
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		multipartResolver.setDefaultEncoding("utf-8");
+		multipartResolver.setMaxUploadSize(10000000);
+		return multipartResolver;
 	}
 }
