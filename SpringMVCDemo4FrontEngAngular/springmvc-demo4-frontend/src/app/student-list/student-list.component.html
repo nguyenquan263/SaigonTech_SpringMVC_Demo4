@@ -1,0 +1,41 @@
+<body>
+  <table border="1" style="width: 90%">
+    <thead>
+      <tr>
+        <th>No. </th>
+        <th>Image </th>
+        <th>First name </th>
+        <th>Last name </th>
+        <th>Gender </th>
+        <th>Email </th>
+        <th>Specialization </th>
+        <th> </th>
+
+      </tr>
+    </thead>
+    <tbody id="data">
+
+      <tr *ngFor="let student of students">
+        <td> 1</td>
+        <td>
+          <img width='100px' height='150px' [src]='"http://localhost:8080/SpringMVCDemo4/getImage/" + student.image' />
+        </td>
+        <td>
+          {{student.firstName}}
+        </td>
+        <td>{{student.lastName}}</td>
+        <td>{{student.male}}</td>
+        <td>{{student.email}}</td>
+        <td>{{student.specialization.name}}</td>
+        <td>
+          <button (click)='goUpdate(student.id)'>Update</button>
+          <button (click)='deleteStudent(student.id)'>Delete</button>
+        </td>
+      </tr>
+
+
+    </tbody>
+  </table>
+
+  <button (click)="goAdd();">ADD A STUDENT</button>
+</body>
