@@ -32,28 +32,13 @@ public class studentDAO {
 		return stuArr;
 	}
 	
-	public List<Student> getAllStudentBySpecialization(Specialization spec){
-		Session session = sessionFactory.getCurrentSession();
-		
-		Query query = session.createQuery("from Student s where s.id = :id").setParameter("id", spec.getId());
-		
-		List<Student> stuArr = query.list();
-		
-		for (Student stu: stuArr) {
-			stu.setSpecialization(specializationDAO.getSpecializationByID(1));
-		}
-		
-		return stuArr;
-	}
-	
 	public Student getStudentByID(int id){
 		Session session = sessionFactory.getCurrentSession();
 		
 		Query query = session.createQuery("from Student s where s.id = :id").setParameter("id", id);
 		
 		Student stu = (Student) query.list().get(0);
-		
-//		stu.setSpecialization(specializationDAO.getSpecializationByID(stu.getSpecialization().getId()));
+
 		
 		return stu;
 	}
@@ -66,6 +51,7 @@ public class studentDAO {
 
 			return stu;
 		} catch (Exception e) {
+			System.err.println(e.getMessage());
 			return null;
 		}
 	}
@@ -80,7 +66,7 @@ public class studentDAO {
 
 			return "Delete successfully";
 		} catch (Exception e) {
-			return "Delete unsuccessfully";
+			return e.getMessage();
 		}
 	}
 
